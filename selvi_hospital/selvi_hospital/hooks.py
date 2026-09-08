@@ -254,6 +254,24 @@ app_license = "mit"
 # Translation
 # ------------
 # List of apps whose translatable strings should be excluded from this app's translations.
+fixtures = [
+    {
+        "dt": "Workspace"
+    },
+    {
+        "dt": "Workspace Sidebar",
+        "filters": [
+            ["name", "in", [
+                "Reception",
+                "Nurse",
+                "Practitioner",
+                "Lab",
+                "Pharmacy",
+                "Emergency"
+            ]]
+        ]
+    }
+]
 # ignore_translatable_strings_from = []
 
 
