@@ -2,42 +2,37 @@ services:
   configurator:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
       REDIS_CACHE: redis-cache:6379
       REDIS_QUEUE: redis-queue:6379
 
   backend:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
 
   frontend:
     ports:
-      - "8085:8080"
+      - "8081:8080"
     environment:
       FRAPPE_SITE_NAME_HEADER: frontend
 
   websocket:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
 
   queue-short:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
 
   queue-long:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
+      DB_PORT: "3306"
 
   scheduler:
     environment:
       DB_HOST: db
-      DB_PORT: 3306
-
-volumes:
-  sites:
-    name: sinapse_v16_sites
-
+      DB_PORT: "3306"
