@@ -309,7 +309,8 @@ fixtures.append({
     "dt": "Custom Field",
     "filters": [
         ["name", "in", [
-            "Patient Appointment-custom_patient_type"
+            "Patient Appointment-custom_patient_type",
+            "Patient Encounter-custom_blood_sugar"
         ]]
     ]
 })
