@@ -289,6 +289,16 @@ fixtures = [
                 "Emergency"
             ]]
         ]
+    },
+    {
+        "dt": "Desktop Icon",
+        "filters": [
+            ["name", "in", [
+                "Lab",
+                "Pharmacy",
+                "Reception"
+            ]]
+        ]
     }
 ]
 

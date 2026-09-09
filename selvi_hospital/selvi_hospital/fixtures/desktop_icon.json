@@ -1,0 +1,50 @@
+[
+  {
+    "doctype": "Desktop Icon",
+    "name": "Lab",
+    "label": "Lab",
+    "bg_color": "gray",
+    "link_type": "Workspace Sidebar",
+    "app": null,
+    "icon_type": "Link",
+    "parent_icon": "Marley Health",
+    "icon": "flask-conical",
+    "link_to": "Lab",
+    "idx": 5,
+    "standard": 0,
+    "hidden": 0,
+    "restrict_removal": 0
+  },
+  {
+    "doctype": "Desktop Icon",
+    "name": "Pharmacy",
+    "label": "Pharmacy",
+    "bg_color": "gray",
+    "link_type": "Workspace Sidebar",
+    "app": null,
+    "icon_type": "Link",
+    "parent_icon": "Marley Health",
+    "icon": "pill",
+    "link_to": "Pharmacy",
+    "idx": 6,
+    "standard": 0,
+    "hidden": 0,
+    "restrict_removal": 0
+  },
+  {
+    "doctype": "Desktop Icon",
+    "name": "Reception",
+    "label": "Reception",
+    "bg_color": "gray",
+    "link_type": "Workspace Sidebar",
+    "app": null,
+    "icon_type": "Link",
+    "parent_icon": "Marley Health",
+    "icon": "users",
+    "link_to": "Reception",
+    "idx": 1,
+    "standard": 0,
+    "hidden": 0,
+    "restrict_removal": 0
+  }
+]
