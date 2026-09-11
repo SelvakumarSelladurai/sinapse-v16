@@ -1,117 +1,617 @@
-<div align="center">
-  <img src="docs/public/frappe-docker.png" alt="Frappe Docker" width="80" />
-  <h1>Frappe Docker</h1>
-  <p>Docker images and orchestration for Frappe applications.</p>
-  <p>
-    <a href="https://github.com/frappe/frappe_docker/actions/workflows/core-build-stable.yml">
-      <img src="https://img.shields.io/github/actions/workflow/status/frappe/frappe_docker/core-build-stable.yml?branch=main&label=Build%20Stable" alt="Build Stable" />
-    </a>
-    <a href="https://github.com/frappe/frappe_docker/actions/workflows/core-build-develop.yml">
-      <img src="https://img.shields.io/github/actions/workflow/status/frappe/frappe_docker/core-build-develop.yml?branch=main&label=Build%20Develop" alt="Build Develop" />
-    </a>
-    <a href="https://frappe.github.io/frappe_docker/">
-      <img src="https://img.shields.io/badge/Docs-Open%20Site-0A7EA4" alt="Docs" />
-    </a>
-  </p>
-</div>
+# Selvi Hospital – Sinapse v16
 
-## What is this?
+## Deployment & Installation Guide
 
-This repository is the official container setup for Frappe applications.
+# 1. System Requirements
 
-It provides Docker images, Compose configurations, and documentation for running Frappe applications, including ERPNext, CRM, Helpdesk, and other Frappe apps, in containers.
+The following environment is required for deploying Selvi Hospital Sinapse v16.
 
-Use it if you want to:
+### Operating System
 
-- run ERPNext, CRM, Helpdesk, or other Frappe apps with Docker
-- start from a quick demo setup
-- use production-ready Docker images and Compose setups
-- build custom app images
-- deploy and operate Frappe in production
+* Ubuntu 24.04 LTS
+* WSL2 when deploying through Windows
 
-## Repository Structure
+### Required Software
+
+* Git
+* Podman
+* Podman Compose
+
+### Recommended Hardware
+
+* Minimum 8 GB RAM
+* 4 CPU cores or more
+* Minimum 30 GB available storage
+* SSD recommended
+
+Additional resources may be required depending on the number of users, patient records, attachments, reports, and background jobs.
+
+---
+
+# 2. Prerequisites
+
+Before starting the deployment, verify that the required software is installed.
+
+## 2.1 Check Ubuntu
 
 ```bash
-frappe_docker/
-├── docs/                 # Complete documentation
-├── overrides/            # Docker Compose configurations for different scenarios
-├── compose.yaml          # Base Compose File for production setups
-├── pwd.yml               # Single Compose File for quick disposable demo
-├── images/               # Dockerfiles for building Frappe images
-├── development/          # Development environment configurations
-├── devcontainer-example/ # VS Code devcontainer setup
-└── resources/            # Helper scripts and configuration templates
+lsb_release -a
 ```
 
-> This section describes the structure of **this repository**, not the Frappe framework itself.
+or:
 
-### Key Components
-
-- `docs/` - Canonical documentation for all deployment and operational workflows
-- `overrides/` - Opinionated Compose overrides for common deployment patterns
-- `compose.yaml` - Base compose file for production setups (production)
-- `pwd.yml` - Disposable demo environment (non-production)
-
-## Documentation
-
-The full `frappe_docker` documentation is available in [`docs/`](docs/) and published at [frappe.github.io/frappe_docker](https://frappe.github.io/frappe_docker/).
-
-### Recommended entry points:
-
-- **New here:** [Getting Started Guide](docs/getting-started.md)
-- **Choosing a setup:** [Deployment methods](docs/01-getting-started/01-choosing-a-deployment-method.md)
-- **ARM64 notes:** [ARM64](docs/01-getting-started/03-arm64.md)
-- **Container setup overview:** [Container Setup Overview](docs/02-setup/01-overview.md)
-- **Running in production:** [Production docs](docs/03-production/)
-- **Operating a deployment:** [Operations docs](docs/04-operations/)
-- **Development workflows:** [Development](docs/05-development/01-development.md)
-- **FAQ:** [Frequently Asked Questions](https://github.com/frappe/frappe_docker/wiki/Frequently-Asked-Questions)
-
-## Prerequisites
-
-- [Docker](https://docs.docker.com/get-docker/)
-- [Docker Compose v2](https://docs.docker.com/compose/)
-- [git](https://docs.github.com/en/get-started/getting-started-with-git/set-up-git)
-
-> For Docker basics and best practices refer to Docker's [documentation](http://docs.docker.com)
-
-## Demo setup
-
-The fastest way to try Frappe locally is with the single-file demo setup in `pwd.yml`.
-
-### Try on your environment
-
-> **⚠️ Disposable demo only**
->
-> **This setup is intended for short-lived evaluation only.** You will not be able to install custom apps to this setup. For production deployments, custom configurations, and detailed explanations, see the full documentation.
-
-First clone the repo:
-
-```sh
-git clone https://github.com/frappe/frappe_docker
-cd frappe_docker
+```bash
+cat /etc/os-release
 ```
 
-Then run:
+The deployment environment should use Ubuntu 24.04 LTS.
 
-```sh
-docker compose -f pwd.yml up -d
+---
+
+## 2.2 Check Git
+
+```bash
+git --version
 ```
 
-Wait for a couple of minutes for ERPNext site to be created or check `create-site` container logs before opening browser on port `8080`. (username: `Administrator`, password: `admin`)
+If Git is not installed:
 
-## Contributing
+```bash
+sudo apt update
+sudo apt install git -y
+```
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+---
 
-This repository is only for container related stuff. You also might want to contribute to:
+## 2.3 Check Podman
 
-## Resources
+```bash
+podman --version
+```
 
-- [Frappe framework](https://github.com/frappe/frappe),
-- [ERPNext](https://github.com/frappe/erpnext),
-- [Frappe Bench](https://github.com/frappe/bench).
+If Podman is not installed:
 
-## License
+```bash
+sudo apt update
+sudo apt install podman -y
+```
 
-This repository is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+Verify the installation:
+
+```bash
+podman info
+```
+
+---
+
+## 2.4 Check Podman Compose
+
+```bash
+podman compose version
+```
+
+Podman Compose must be available before starting the application.
+
+---
+
+# 3. Get the Selvi Hospital Source Code
+
+Clone the Selvi Hospital Sinapse v16 repository:
+
+```bash
+git clone https://github.com/bfx-labs/sinapse-v16
+```
+
+Move into the project directory:
+
+```bash
+cd sinapse-v16
+```
+
+Check the repository:
+
+```bash
+git status
+```
+
+Check the current branch:
+
+```bash
+git branch
+```
+
+To retrieve the latest code from the configured branch:
+
+```bash
+git pull
+```
+
+---
+
+# 4. Selvi Hospital Container Image
+
+Selvi Hospital Sinapse v16 uses a **custom container image maintained specifically for the Selvi Hospital deployment**.
+
+The approved image is:
+
+```text
+ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+## 4.1 Pull the Selvi Hospital Image
+
+Using Podman:
+
+```bash
+podman pull ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+## 4.2 Verify the Image
+
+After pulling the image:
+
+```bash
+podman images
+```
+
+The image should appear similar to:
+
+```text
+REPOSITORY                 TAG
+ghcr.io/bfx-labs/selvi-v16 v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+You can also inspect the image:
+
+```bash
+podman inspect ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+---
+
+# 5. Project Directory
+
+After cloning the repository:
+
+```bash
+cd sinapse-v16
+```
+
+Check the project files:
+
+```bash
+ls -lah
+```
+
+Check the directory structure:
+
+```bash
+find . -maxdepth 2 -type d
+```
+
+The project contains the deployment configuration required to run the Selvi Hospital Sinapse environment.
+
+---
+
+# 6. Container Configuration
+
+Before starting the application, verify the compose configuration.
+
+Check for the compose file:
+
+```bash
+ls -lah
+```
+
+Common configuration files include:
+
+```text
+compose.yaml
+docker-compose.yml
+```
+
+Open the compose configuration:
+
+```bash
+cat compose.yaml
+```
+
+If the project uses `docker-compose.yml`:
+
+```bash
+cat docker-compose.yml
+```
+
+The configuration should reference the Selvi Hospital image:
+
+```text
+ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+---
+
+# 7. Start Selvi Hospital Sinapse
+
+From the project directory:
+
+```bash
+cd sinapse-v16
+```
+
+Start the services:
+
+```bash
+podman compose up -d
+```
+
+If the images have not already been pulled, Podman Compose may pull the required images according to the compose configuration.
+
+For a controlled deployment, it is recommended to explicitly pull the required Selvi image first:
+
+```bash
+podman pull ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+Then start:
+
+```bash
+podman compose up -d
+```
+
+---
+
+# 8. Database Migration
+
+After deploying a new application version or restoring an existing environment, run the migration.
+
+Inside the backend container:
+
+```bash
+cd /home/frappe/frappe-bench
+```
+
+Run:
+
+```bash
+bench --site sinapse.localhost migrate
+```
+
+Migration may perform:
+
+* Database schema updates
+* Application patches
+* DocType updates
+* Customization updates
+* Fixture synchronization
+* Application metadata updates
+
+Check the terminal output carefully and ensure there are no migration errors.
+
+---
+
+# 9. Build Application Assets
+
+After application updates or changes to frontend files, rebuild the assets:
+
+```bash
+bench build
+```
+
+After the build completes successfully, clear the cache:
+
+```bash
+bench --site sinapse.localhost clear-cache
+```
+
+Clear website cache:
+
+```bash
+bench --site sinapse.localhost clear-website-cache
+```
+
+---
+
+# 10. Restart the Application
+
+Exit the backend container:
+
+```bash
+exit
+```
+
+Restart the services:
+
+```bash
+podman compose restart
+```
+
+Check the containers:
+
+```bash
+podman ps
+```
+
+---
+
+# 11. Access Selvi Hospital Sinapse
+
+Once all required containers are running, access the application using the configured URL.
+
+For local deployment:
+
+```text
+http://localhost:<PORT>
+```
+
+For production deployment:
+
+```text
+https://<SELVI-HOSPITAL-DOMAIN>
+```
+
+The production domain and port should match the deployment configuration.
+
+---
+
+# 12. Database Backup
+
+Before performing updates, migrations, or major configuration changes, create a database backup.
+
+Enter the backend container:
+
+```bash
+podman exec -it <backend-container> bash
+```
+
+Navigate to:
+
+```bash
+cd /home/frappe/frappe-bench
+```
+
+Run:
+
+```bash
+bench --site sinapse.localhost backup
+```
+
+Check the backup directory:
+
+```bash
+ls -lah sites/sinapse.localhost/private/backups/
+```
+
+Backups should also be copied to storage outside the application server.
+
+---
+
+# 13. Application Update Procedure
+
+When a new Selvi Hospital Sinapse version is released, follow this sequence.
+
+## Step 1 – Backup
+
+Create a database backup:
+
+```bash
+bench --site sinapse.localhost backup
+```
+
+---
+
+## Step 2 – Update Source Code
+
+On the host machine:
+
+```bash
+cd sinapse-v16
+```
+
+Pull the latest code:
+
+```bash
+git pull
+```
+
+Check the changes:
+
+```bash
+git status
+```
+
+---
+
+## Step 3 – Pull the Updated Container Image
+
+Pull the image specified for the new release.
+
+For the currently documented version:
+
+```bash
+podman pull ghcr.io/bfx-labs/selvi-v16:v16.1-selvi-9031cd994b92cde660a37571f2bbbf6d834702ec
+```
+
+---
+
+## Step 4 – Recreate Services
+
+```bash
+podman compose up -d
+```
+
+Verify:
+
+```bash
+podman ps
+```
+
+---
+
+## Step 5 – Run Migration
+
+Enter the backend:
+
+```bash
+podman exec -it <backend-container> bash
+```
+
+Then:
+
+```bash
+cd /home/frappe/frappe-bench
+```
+
+Run:
+
+```bash
+bench --site sinapse.localhost migrate
+```
+
+---
+
+## Step 6 – Build Assets
+
+```bash
+bench build
+```
+
+Clear cache:
+
+```bash
+bench --site sinapse.localhost clear-cache
+```
+
+---
+
+## Step 7 – Restart
+
+Exit:
+
+```bash
+exit
+```
+
+Restart:
+
+```bash
+podman compose restart
+```
+
+---
+
+## Step 8 – Verify
+
+Check:
+
+```bash
+podman ps
+```
+
+# 14. Troubleshooting
+
+## Sinapse is not opening
+
+Check:
+
+```bash
+podman ps
+```
+
+If a container is stopped:
+
+```bash
+podman ps -a
+```
+
+Check its logs:
+
+```bash
+podman logs <container-name>
+```
+
+Restart:
+
+```bash
+podman compose restart
+```
+
+---
+
+## Port conflict
+
+Check ports:
+
+```bash
+sudo ss -ltnp
+```
+
+Check Podman:
+
+```bash
+podman ps
+```
+
+Update the port configuration if necessary and recreate the containers:
+
+```bash
+podman compose down
+podman compose up -d
+```
+
+---
+
+## Container keeps restarting
+
+Check:
+
+```bash
+podman ps -a
+```
+
+Then:
+
+```bash
+podman logs <container-name>
+```
+
+Check for:
+
+* Database connection errors
+* Redis connection errors
+* Missing configuration
+* Permission errors
+* Python exceptions
+* Port conflicts
+* Missing files
+
+---
+
+## Application changes are not visible
+
+Run:
+
+```bash
+bench --site sinapse.localhost migrate
+```
+
+Then:
+
+```bash
+bench build
+```
+
+Clear cache:
+
+```bash
+bench --site sinapse.localhost clear-cache
+```
+
+Restart:
+
+```bash
+podman compose restart
+```
+
+Perform a hard refresh in the browser.
+
+---
