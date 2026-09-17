@@ -213,6 +213,7 @@ app_license = "mit"
 # before_job = ["selvi_hospital.utils.before_job"]
 # after_job = ["selvi_hospital.utils.after_job"]
 
+
 # User Data Protection
 # --------------------
 
@@ -261,43 +262,39 @@ fixtures = [
     {
         "dt": "Workspace Sidebar",
         "filters": [
-            ["name", "in", [
-                "Reception",
-                "Nurse",
-                "Practitioner",
-                "Lab",
-                "Pharmacy",
-                "Emergency"
-            ]]
-        ]
-    }
-]
-# ignore_translatable_strings_from = []
-
-
-
-fixtures = [
-    {
-        "dt": "Workspace Sidebar",
-        "filters": [
-            ["name", "in", [
-                "Reception",
-                "Nurse",
-                "Practitioner",
-                "Lab",
-                "Pharmacy",
-                "Emergency"
-            ]]
+            [
+                "name",
+                "in",
+                [
+                    "Healthcare",
+                    "Outpatient",
+                    "Reception",
+                    "Inpatient",
+                    "Users",
+                    "Lab",
+                    "Pharmacy",
+                    "Nurse",
+                    "Practitioner",
+                ]
+            ]
         ]
     },
     {
         "dt": "Desktop Icon",
         "filters": [
-            ["name", "in", [
-                "Lab",
-                "Pharmacy",
-                "Reception"
-            ]]
+            [
+                "name",
+                "in",
+                [
+                    "Healthcare",
+                    "Outpatient",
+                    "Reception",
+                    "Inpatient",
+                    "Users",
+                    "Lab",
+                    "Pharmacy"
+                ]
+            ]
         ]
     }
 ]
@@ -343,4 +340,3 @@ fixtures.append({
         ]]
     ]
 })
-on_login = "selvi_hospital.auth.redirect_doctor_to_appointments"
